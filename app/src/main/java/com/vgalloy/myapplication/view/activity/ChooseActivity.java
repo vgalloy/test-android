@@ -45,7 +45,7 @@ public class ChooseActivity extends AppCompatActivity {
         String pathToDownload = sdcard.getAbsolutePath() + "/Download";
         String epubPath = pathToDownload + "/" + item;
 
-        //// TODO: 17/11/2016 extract in activity with function getBundle
+        // TODO: 17/11/2016 extract in activity with function getBundle
         Bundle b = new Bundle();
         b.putString(ChooseActivity.EPUBPATH, epubPath); //Your id
         intent.putExtras(b); //Put your id to your next Intent

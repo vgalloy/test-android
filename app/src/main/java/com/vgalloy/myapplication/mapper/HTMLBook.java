@@ -4,7 +4,7 @@ package com.vgalloy.myapplication.mapper;
  * @author Vincent Galloy
  *         Created by Vincent Galloy on 13/11/2016.
  */
-public class HTMLBook {
+public final class HTMLBook {
 
     private String head;
     private String body;
