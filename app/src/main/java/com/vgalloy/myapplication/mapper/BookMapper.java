@@ -56,7 +56,6 @@ public final class BookMapper {
      */
     private static List<String> parse(Resource resource) {
         List<String> sentenceList = new ArrayList<>();
-        System.out.println(resource);
         XmlPullParser parser = Xml.newPullParser();
 
         try {
@@ -64,6 +63,7 @@ public final class BookMapper {
 
 //            Serializer serializer = new Persister();
             XmlMapper xmlMapper = new XmlMapper();
+//            xmlMapper.readValue(resource.getInputStream(), HTMLBook.class);
 
             return Collections.singletonList(tmp);
 

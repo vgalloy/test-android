@@ -32,6 +32,13 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'nl.siegmann.epublib:epublib-core:3.1'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.4'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.4'
+//    compile (group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1') {
+//        exclude group: 'xpp3', module: 'xpp3'
+//    }
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

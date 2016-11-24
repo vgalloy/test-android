@@ -1,10 +1,12 @@
 package com.vgalloy.myapplication.service.impl;
 
 import com.vgalloy.myapplication.service.BookService;
+import com.vgalloy.myapplication.service.exception.ServiceException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.epub.EpubReader;
@@ -18,16 +20,13 @@ public enum BookServiceImpl implements BookService {
 
     @Override
     public Book getBook(String path) {
-        // FIXME : fail fast
-        // TODO System de loading ?
-        System.out.println("Je load le book : " + path);
+        Objects.requireNonNull(path);
         File file = new File(path);
         try {
             InputStream inputStream = new FileInputStream(file);
             return new EpubReader().readEpub(inputStream);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new ServiceException(e);
         }
-        return null;
     }
 }

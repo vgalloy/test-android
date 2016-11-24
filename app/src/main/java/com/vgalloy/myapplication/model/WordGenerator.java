@@ -18,6 +18,6 @@ public final class WordGenerator {
         if (index < simpleBook.getWordList().size()) {
             return simpleBook.getWordList().get(index++);
         }
-        return "";
+        return "end : " + index++;
     }
 }

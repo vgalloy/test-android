@@ -8,7 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 import com.vgalloy.myapplication.R;
+import com.vgalloy.myapplication.task.ListBookTask;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,57 +23,36 @@ import static android.R.id.list;
  */
 
 public class ChooseActivity extends AppCompatActivity {
-  private ListView listview;
-  public static final String EPUBPATH = "EPUBPATH";
+    private ListView listview;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    //get the view
-    setContentView(R.layout.activity_choose);
-    listview = (ListView) findViewById(R.id.listview);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose);
 
-    final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-    listview.setAdapter(adapter);
-    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        String item = adapter.getItem(position);
+        listview = (ListView) findViewById(R.id.listview);
 
-        System.out.println("item" + item);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String item = adapter.getItem(position);
 
-        Intent intent = new Intent(ChooseActivity.this, ReaderActivity.class);
+                File sdcard = Environment.getExternalStorageDirectory();
+                String pathToDownload = sdcard.getAbsolutePath() + "/Download";
+                String epubPath = pathToDownload + "/" + item;
 
-        File sdcard = Environment.getExternalStorageDirectory();
-        String pathToDownload = sdcard.getAbsolutePath() + "/Download";
-        String epubPath = pathToDownload + "/" + item;
+                Intent intent = new Intent(ChooseActivity.this, ReaderActivity.class);
+                intent.putExtras(ReaderActivity.getBundle(epubPath));
+                startActivity(intent);
+            }
+        });
 
-        // TODO: 17/11/2016 extract in activity with function getBundle
-        Bundle b = new Bundle();
-        b.putString(ChooseActivity.EPUBPATH, epubPath); //Your id
-        intent.putExtras(b); //Put your id to your next Intent
-        startActivity(intent);
-      }
-    });
-
-    //get data (async)
-    asyncGetText();
-  }
-
-  private void asyncGetText() {
-    File sdcard = Environment.getExternalStorageDirectory();
-    String pathToDownload = sdcard.getAbsolutePath() + "/Download";
-    File downloadDirectory = new File(pathToDownload);
-
-    final List<String> list = new ArrayList<>();
-    for (String fileName : downloadDirectory.list()) {
-      String[] ext = fileName.split("\\.");
-      String extension = ext[ext.length - 1];
-      if ("epub".equals(extension)) {
-        list.add(fileName);
-      }
+        asyncGetText();
     }
 
-    //todo setdata in list
-  }
+    private void asyncGetText() {
+        new ListBookTask(listview).execute();
+    }
 }
