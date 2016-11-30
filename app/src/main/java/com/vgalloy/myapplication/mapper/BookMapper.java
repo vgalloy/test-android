@@ -2,7 +2,6 @@ package com.vgalloy.myapplication.mapper;
 
 import android.util.Xml;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.vgalloy.myapplication.model.SimpleBook;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -62,7 +61,7 @@ public final class BookMapper {
             String tmp = new String(resource.getData());
 
 //            Serializer serializer = new Persister();
-            XmlMapper xmlMapper = new XmlMapper();
+//            XmlMapper xmlMapper = new XmlMapper();
 //            xmlMapper.readValue(resource.getInputStream(), HTMLBook.class);
 
             return Collections.singletonList(tmp);
