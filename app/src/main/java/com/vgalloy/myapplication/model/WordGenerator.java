@@ -1,9 +1,11 @@
 package com.vgalloy.myapplication.model;
 
+import java.util.Objects;
 
 /**
+ * Created by Vincent Galloy on 11/11/2016.
+ *
  * @author Vincent Galloy
- *         Created by Vincent Galloy on 11/11/2016.
  */
 public final class WordGenerator {
 
@@ -11,7 +13,7 @@ public final class WordGenerator {
     private int index = 0;
 
     public WordGenerator(SimpleBook simpleBook) {
-        this.simpleBook = simpleBook;
+        this.simpleBook = Objects.requireNonNull(simpleBook);
     }
 
     public String nextWord() {

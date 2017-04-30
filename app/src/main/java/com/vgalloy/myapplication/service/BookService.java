@@ -3,8 +3,9 @@ package com.vgalloy.myapplication.service;
 import nl.siegmann.epublib.domain.Book;
 
 /**
+ * Created by Vincent Galloy on 11/11/2016.
+ *
  * @author Vincent Galloy
- *         Created by Vincent Galloy on 11/11/2016.
  */
 public interface BookService {
 

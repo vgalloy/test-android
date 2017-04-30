@@ -1,5 +1,6 @@
-package com.vgalloy.myapplication.mapper;
+package com.vgalloy.myapplication.mapper.book;
 
+import com.vgalloy.myapplication.mapper.text.TextParser;
 import com.vgalloy.myapplication.model.SimpleBook;
 
 import org.jsoup.Jsoup;
@@ -13,35 +14,21 @@ import java.util.Objects;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
-import nl.siegmann.epublib.util.StringUtil;
 
 /**
  * Created by Vincent Galloy on 11/11/2016.
  *
  * @author Vincent Galloy
  */
-public final class BookMapper {
+public final class BookMapperImpl implements BookMapper {
 
-    private static final BookMapper INSTANCE = new BookMapper();
+    private final TextParser textParser;
 
-    /**
-     * Constructor.
-     * To prevent external instantiation
-     */
-    private BookMapper() {
-
+    public BookMapperImpl(TextParser textParser) {
+        this.textParser = Objects.requireNonNull(textParser);
     }
 
-    public static BookMapper getInstance() {
-        return INSTANCE;
-    }
-
-    /**
-     * Map the complex {@link Book} object into a simple one
-     *
-     * @param book the book
-     * @return the simple book
-     */
+    @Override
     public SimpleBook map(Book book) {
         Objects.requireNonNull(book);
         List<String> wordList = new ArrayList<>();
@@ -83,22 +70,10 @@ public final class BookMapper {
 
         if (node instanceof TextNode) {
             String text = ((TextNode) node).getWholeText();
-            List<String> words = extractWord(text);
+            List<String> words = textParser.parse(text);
             sentenceList.addAll(words);
         } else {
             parse(sentenceList, node.childNodes());
         }
-    }
-
-    private List<String> extractWord(String text) {
-        Objects.requireNonNull(text);
-        List<String> worlds = new ArrayList<>();
-        for (String word : text.split(" ")) {
-            String trimWord = word.trim();
-            if (!StringUtil.isBlank(trimWord)) {
-                worlds.add(trimWord);
-            }
-        }
-        return worlds;
     }
 }

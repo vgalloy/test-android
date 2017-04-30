@@ -3,8 +3,9 @@ package com.vgalloy.myapplication.model;
 import java.util.List;
 
 /**
+ * Created by Vincent Galloy on 11/11/2016.
+ *
  * @author Vincent Galloy
- *         Created by Vincent Galloy on 11/11/2016.
  */
 public final class SimpleBook {
 

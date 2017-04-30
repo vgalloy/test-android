@@ -9,9 +9,10 @@ import java.io.File;
 import java.util.Objects;
 
 /**
- * @author Vincent Galloy Created by Vincent Galloy on 08/11/2016.
+ * Created by Vincent Galloy on 08/11/2016.
+ *
+ * @author Vincent Galloy
  */
-
 public class ListBookTask extends AsyncTask<Void, String, Integer> {
 
     private final ListView listView;

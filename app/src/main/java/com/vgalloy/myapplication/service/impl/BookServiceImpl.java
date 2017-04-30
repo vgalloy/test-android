@@ -12,8 +12,9 @@ import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.epub.EpubReader;
 
 /**
+ * Created by Vincent Galloy on 11/11/2016.
+ *
  * @author Vincent Galloy
- *         Created by Vincent Galloy on 11/11/2016.
  */
 public enum BookServiceImpl implements BookService {
     INSTANCE;

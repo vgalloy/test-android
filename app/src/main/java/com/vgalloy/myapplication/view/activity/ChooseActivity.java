@@ -19,10 +19,12 @@ import java.util.List;
 import static android.R.id.list;
 
 /**
- * @author Vincent Galloy Created by Vincent Galloy on 11/11/2016.
+ * Created by Vincent Galloy on 11/11/2016.
+ *
+ * @author Vincent Galloy
  */
-
 public class ChooseActivity extends AppCompatActivity {
+
     private ListView listview;
 
     @Override

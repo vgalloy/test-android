@@ -10,9 +10,11 @@ import com.vgalloy.myapplication.R;
 
 /**
  * Created by Vincent Galloy on 08/11/2016.
+ *
  * @author Vincent Galloy
  */
 public class HomeActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

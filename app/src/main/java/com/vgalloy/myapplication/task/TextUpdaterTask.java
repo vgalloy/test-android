@@ -6,8 +6,9 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
-import com.vgalloy.myapplication.mapper.BookMapper;
-import com.vgalloy.myapplication.model.FakeBookGenerator;
+import com.vgalloy.myapplication.mapper.book.BookMapperImpl;
+import com.vgalloy.myapplication.mapper.text.TextParser;
+import com.vgalloy.myapplication.mapper.text.TextParserImpl;
 import com.vgalloy.myapplication.model.SimpleBook;
 import com.vgalloy.myapplication.model.WordGenerator;
 import com.vgalloy.myapplication.service.BookService;
@@ -18,7 +19,9 @@ import java.util.Objects;
 import nl.siegmann.epublib.domain.Book;
 
 /**
- * @author Vincent Galloy Created by Vincent Galloy on 08/11/2016.
+ * Created by Vincent Galloy on 08/11/2016.
+ *
+ * @author Vincent Galloy
  */
 
 public class TextUpdaterTask extends AsyncTask<TextView, Integer, Long> {
@@ -30,7 +33,8 @@ public class TextUpdaterTask extends AsyncTask<TextView, Integer, Long> {
     public TextUpdaterTask(String epubPath) {
         BookService bookService = BookServiceImpl.INSTANCE;
         Book book = bookService.getBook(epubPath);
-        SimpleBook simpleBook = BookMapper.getInstance().map(book);
+        TextParser textParser = new TextParserImpl();
+        SimpleBook simpleBook = new BookMapperImpl(textParser).map(book);
         this.wordGenerator = new WordGenerator(simpleBook);
     }
 
@@ -38,7 +42,7 @@ public class TextUpdaterTask extends AsyncTask<TextView, Integer, Long> {
     protected Long doInBackground(TextView... textViews) {
         Objects.requireNonNull(textViews);
         if (textViews.length != 1) {
-            throw new IllegalStateException("Ups"); // TODO Perso Exception ?
+            throw new IllegalStateException("Only one textViews is allowed. There is " + textViews.length + " textViews");
         }
 
         textView = textViews[0];
