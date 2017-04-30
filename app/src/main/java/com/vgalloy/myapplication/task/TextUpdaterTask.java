@@ -30,9 +30,8 @@ public class TextUpdaterTask extends AsyncTask<TextView, Integer, Long> {
     public TextUpdaterTask(String epubPath) {
         BookService bookService = BookServiceImpl.INSTANCE;
         Book book = bookService.getBook(epubPath);
-        SimpleBook simpleBook = BookMapper.map(book);
-//        this.wordGenerator = new WordGenerator(simpleBook);
-        this.wordGenerator = new WordGenerator(FakeBookGenerator.fakeBook());
+        SimpleBook simpleBook = BookMapper.getInstance().map(book);
+        this.wordGenerator = new WordGenerator(simpleBook);
     }
 
     @Override

@@ -1,33 +1,39 @@
 package com.vgalloy.myapplication.mapper;
 
-import android.util.Xml;
-
 import com.vgalloy.myapplication.model.SimpleBook;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
+import nl.siegmann.epublib.util.StringUtil;
 
 /**
+ * Created by Vincent Galloy on 11/11/2016.
+ *
  * @author Vincent Galloy
- *         Created by Vincent Galloy on 11/11/2016.
  */
 public final class BookMapper {
 
+    private static final BookMapper INSTANCE = new BookMapper();
+
     /**
      * Constructor.
-     * To prevent instantiation
+     * To prevent external instantiation
      */
     private BookMapper() {
-        throw new AssertionError();
+
+    }
+
+    public static BookMapper getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -36,7 +42,7 @@ public final class BookMapper {
      * @param book the book
      * @return the simple book
      */
-    public static SimpleBook map(Book book) {
+    public SimpleBook map(Book book) {
         Objects.requireNonNull(book);
         List<String> wordList = new ArrayList<>();
 
@@ -47,41 +53,14 @@ public final class BookMapper {
         return new SimpleBook(wordList);
     }
 
-    /**
-     * Extract all word from a resource
-     *
-     * @param resource
-     * @return
-     */
-    private static List<String> parse(Resource resource) {
+    private List<String> parse(Resource resource) {
         List<String> sentenceList = new ArrayList<>();
-        XmlPullParser parser = Xml.newPullParser();
 
         try {
             String tmp = new String(resource.getData());
-
-//            Serializer serializer = new Persister();
-//            XmlMapper xmlMapper = new XmlMapper();
-//            xmlMapper.readValue(resource.getInputStream(), HTMLBook.class);
-
-            return Collections.singletonList(tmp);
-
-//            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-//            parser.setInput(resource.getInputStream(), null);
-//            parser.nextTag();
-//            while (parser.next() != XmlPullParser.END_TAG) {
-//                if (parser.getEventType() != XmlPullParser.START_TAG) {
-//                    continue;
-//                }
-//                String name = parser.getName();
-//                if (name.equals("body")) {
-//                    String sentence = readBody(parser);
-//                    sentenceList.add(sentence);
-//                } else {
-//                    skip(parser);
-//                }
-//            }
-//            System.out.println(resource);
+            Document document = Jsoup.parse(tmp);
+            parse(sentenceList, document.childNodes());
+            return sentenceList;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,30 +68,37 @@ public final class BookMapper {
         return sentenceList;
     }
 
-    private static String readBody(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private void parse(List<String> sentenceList, List<Node> nodes) {
+        Objects.requireNonNull(sentenceList);
+        Objects.requireNonNull(nodes);
 
-        String result = "";
-        if (parser.next() == XmlPullParser.TEXT) {
-            result = parser.getInputEncoding();
-            parser.nextTag();
+        for (Node node : nodes) {
+            parse(sentenceList, node);
         }
-        return result;
     }
 
-    private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
+    private void parse(List<String> sentenceList, Node node) {
+        Objects.requireNonNull(sentenceList);
+        Objects.requireNonNull(node);
+
+        if (node instanceof TextNode) {
+            String text = ((TextNode) node).getWholeText();
+            List<String> words = extractWord(text);
+            sentenceList.addAll(words);
+        } else {
+            parse(sentenceList, node.childNodes());
         }
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-                case XmlPullParser.END_TAG:
-                    depth--;
-                    break;
-                case XmlPullParser.START_TAG:
-                    depth++;
-                    break;
+    }
+
+    private List<String> extractWord(String text) {
+        Objects.requireNonNull(text);
+        List<String> worlds = new ArrayList<>();
+        for (String word : text.split(" ")) {
+            String trimWord = word.trim();
+            if (!StringUtil.isBlank(trimWord)) {
+                worlds.add(trimWord);
             }
         }
+        return worlds;
     }
 }
